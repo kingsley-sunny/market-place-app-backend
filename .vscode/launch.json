@@ -12,7 +12,7 @@
       "program": "${workspaceFolder}/build/app.js",
       "runtimeExecutable": "nodemon",
       "console": "integratedTerminal",
-      "outFiles": ["${workspaceFolder}/**/*.js"]
+      "outFiles": ["${workspaceFolder}/**/*.{js,ts}"]
     }
   ]
 }

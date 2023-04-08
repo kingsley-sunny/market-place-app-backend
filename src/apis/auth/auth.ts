@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { signupUser } from "../../controllers/auth/auth.js";
+import { signinUser, signupUser } from "../../controllers/auth/auth.js";
 
 const router = Router();
 
@@ -14,6 +14,15 @@ router.post(
     body("password", "Password should be greater than 5 characters").isLength({ min: 5 }),
   ],
   signupUser
+);
+
+router.post(
+  "/signin",
+  [
+    body("email", "Email must be a valid email address").trim().toLowerCase().isEmail(),
+    body("password", "Password should be greater than 5 characters").isLength({ min: 5 }),
+  ],
+  signinUser
 );
 
 const authRoutes = router;
