@@ -1,0 +1,38 @@
+{
+  "name": "market-place",
+  "version": "1.0.0",
+  "description": "rest api for a market-place application",
+  "main": "build/app.js",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "mysql2": "^3.2.0",
+    "nodemailer": "^6.9.1",
+    "sequelize": "^6.30.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/uuid": "^9.0.1",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon build/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingsley-sunny/market-place-app-backend.git"
+  },
+  "author": "kingsley-sunny (Ezeobi Kingsley Sunny)",
+  "license": "ISC",
+  "homepage": "https://github.com/kingsley-sunny/market-place-app-backend#readme"
+}

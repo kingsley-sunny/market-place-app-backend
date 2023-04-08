@@ -1,0 +1,3 @@
+create a User model
+properties of the user 
+  firstname, lastname, email, password 
