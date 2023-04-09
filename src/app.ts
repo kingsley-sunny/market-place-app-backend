@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
 import authRoutes from "./apis/auth/auth.js";
+import productRoutes from "./apis/products/product.js";
 import { sequelize } from "./db/db.js";
 import { createErrorObj } from "./utils/functions.js";
 
@@ -15,6 +16,7 @@ app.use(cors());
 
 // The authentication route
 app.use("/auth", authRoutes);
+app.use("/products", productRoutes);
 
 // if the app has an error
 app.use(
@@ -28,8 +30,8 @@ app.use(
 );
 
 try {
-  // await sequelize.sync({ force: true });
-  await sequelize.sync();
+  await sequelize.sync({ force: true });
+  // await sequelize.sync();
   console.log("Connection has been established successfully.");
   app.listen(process.env.PORT);
 } catch (error) {

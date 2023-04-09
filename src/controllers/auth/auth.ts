@@ -69,10 +69,10 @@ export const signinUser = async (
       throw err;
     }
 
-    const token = jwt.sign(
-      { firstname: user.dataValues.id },
-      process.env.JWT_PRIVATE_KEY as string
-    );
+    const token = jwt.sign({ id: user.dataValues.id }, process.env.JWT_PRIVATE_KEY, {
+      expiresIn: "2d",
+      algorithm: "HS256",
+    });
     const response = { email: user.dataValues.email, id: user.dataValues.id, token };
     // user.
     res.status(200).json(createSuccessObj(response, "Successfully logged in", 200));
