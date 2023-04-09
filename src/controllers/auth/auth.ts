@@ -16,7 +16,7 @@ export const signupUser = async (
   next: NextFunction
 ) => {
   try {
-    let validationErrors = validationResult(req).array();
+    let validationErrors: any[] = validationResult(req).array();
     if (validationErrors.length > 0) {
       const err = createErrorObj(validationErrors[0].msg);
       err.status = 401;
@@ -35,6 +35,7 @@ export const signupUser = async (
     const newUser = User.build({ ...userDetails, id: v4() });
 
     await newUser.save();
+
     res.status(201).json(createSuccessObj(newUser, "User created SuccessFully", 201));
   } catch (error) {
     next(error);
@@ -47,9 +48,9 @@ export const signinUser = async (
   next: NextFunction
 ) => {
   try {
-    let validationErrors = validationResult(req).array();
+    let validationErrors: any[] = validationResult(req).array();
     if (validationErrors.length > 0) {
-      const err = createErrorObj(validationErrors[0].msg);
+      const err = createErrorObj(validationErrors[0]?.msg);
       err.status = 401;
       throw err;
     }

@@ -3,8 +3,9 @@ import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
-import authRoutes from "./apis/auth/auth.js";
-import productRoutes from "./apis/products/product.js";
+import authRoutes from "./apis/auth.js";
+import productRoutes from "./apis/product.js";
+import syncDBRelations from "./db-relations/sync-db-relations.js";
 import { sequelize } from "./db/db.js";
 import { createErrorObj } from "./utils/functions.js";
 
@@ -29,11 +30,17 @@ app.use(
   }
 );
 
-try {
-  await sequelize.sync({ force: true });
-  // await sequelize.sync();
-  console.log("Connection has been established successfully.");
-  app.listen(process.env.PORT);
-} catch (error) {
-  console.error("Unable to connect to the database:", error);
-}
+syncDBRelations();
+
+(async () => {
+  try {
+    // await sequelize.sync({ force: true });
+    await sequelize.sync();
+    console.log("Connection has been established successfully.");
+    console.log(process.env.PORT);
+
+    app.listen(process.env.PORT);
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+})();
