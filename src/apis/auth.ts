@@ -25,5 +25,4 @@ router.post(
   signinUser
 );
 
-const authRoutes = router;
-export default authRoutes;
+export const authRoutes = router;

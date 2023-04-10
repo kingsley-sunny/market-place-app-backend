@@ -6,7 +6,7 @@ import { ICreateProductBody, IEditProductParams } from "./types";
 
 export const getProducts = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const products = await Product.findAll({ include: "product-image" });
+    const products = await Product.findAll({ include: ["product-image", "category"] });
 
     res.json(createSuccessObj(products));
   } catch (error: any) {
@@ -33,7 +33,11 @@ export const createProduct = async (
       err.status = 401;
       throw err;
     }
-    const product = await user.createProduct({ ...req.body, id: v4() });
+    const product = await user.createProduct({
+      ...req.body,
+      id: v4(),
+      categoryId: req.body.categoryId,
+    });
     const image = await ProductImage.create({
       id: v4(),
       name: req.file?.originalname,

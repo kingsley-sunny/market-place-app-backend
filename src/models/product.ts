@@ -9,46 +9,56 @@ export interface ProductAttributes {
   quantity: number;
   type: "used" | "new";
   description: string;
-  userId: string;
+  userId?: string;
+  categoryId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const Product: ModelDefined<
   ProductAttributes,
   Optional<ProductAttributes, "location">
-> = sequelize.define("product", {
-  id: {
-    type: STRING,
-    allowNull: false,
-    unique: true,
-    primaryKey: true,
+> = sequelize.define(
+  "product",
+  {
+    id: {
+      type: STRING,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+    },
+    name: {
+      type: STRING,
+      allowNull: false,
+    },
+    model: {
+      type: STRING,
+      allowNull: false,
+    },
+    type: {
+      type: STRING,
+      allowNull: false,
+    },
+    description: {
+      type: CHAR,
+      allowNull: false,
+    },
+    location: {
+      type: STRING,
+      allowNull: false,
+    },
+    quantity: {
+      type: INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
   },
-  name: {
-    type: STRING,
-    allowNull: false,
-  },
-  model: {
-    type: STRING,
-    allowNull: false,
-  },
-  type: {
-    type: STRING,
-    allowNull: false,
-  },
-  description: {
-    type: CHAR,
-    allowNull: false,
-  },
-  location: {
-    type: STRING,
-    allowNull: false,
-  },
-  quantity: {
-    type: INTEGER,
-    allowNull: false,
-    defaultValue: 1,
-  },
-  // userId: {
-  //   type: UUID,
-  //   allowNull: false,
-  // },
-});
+  {
+    indexes: [
+      {
+        type: "FULLTEXT",
+        fields: ["name", "location"],
+      },
+    ],
+  }
+);

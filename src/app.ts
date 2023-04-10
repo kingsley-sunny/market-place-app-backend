@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
-import authRoutes from "./apis/auth";
-import productRoutes from "./apis/product";
+import { adminRoutes, authRoutes, productRoutes } from "./apis";
 import { sequelize } from "./db";
 import { syncDBRelations } from "./db-relations";
+import { isAuth } from "./middlewares";
 import { createErrorObj } from "./utils";
 
 dotenv.config();
@@ -16,9 +16,10 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static("uploads"));
 
-// The authentication route
+// The  routes
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
+app.use("/admin", isAuth, adminRoutes);
 
 // if the app has an error
 app.use(

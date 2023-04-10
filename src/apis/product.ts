@@ -72,5 +72,4 @@ router.put("/edit/:productId", isAuth, upload.single("image"), editProduct);
 
 router.delete("/delete/:productId", isAuth, deletProduct);
 
-const productRoutes = router;
-export default productRoutes;
+export const productRoutes = router;
