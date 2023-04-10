@@ -47,3 +47,43 @@ export const createCategory = async (
     next(error);
   }
 };
+
+export const editCategory = async (
+  req: Request<{ categoryId?: string }, any, IcategoryReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId;
+    const adminUser = await User.findOne({ where: { id: userId, type: "admin" } });
+    if (!adminUser) {
+      const err = createErrorObj("Unauthorized", 403);
+      throw err;
+    }
+    await Category.update({ name: req.body.name }, { where: { id: req.params.categoryId } });
+    res.status(200).json(createSuccessObj({ name: req.body.name, id: req.params.categoryId }));
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const deleteCategory = async (
+  req: Request<{ categoryId?: string }, any, IcategoryReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId;
+    const adminUser = await User.findOne({ where: { id: userId, type: "admin" } });
+    if (!adminUser) {
+      const err = createErrorObj("Unauthorized", 403);
+      throw err;
+    }
+    const response = await Category.destroy({ where: { id: req.params.categoryId } });
+    res.status(200).json(createSuccessObj({ no: response }));
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
