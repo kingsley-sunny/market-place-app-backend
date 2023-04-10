@@ -1,6 +1,12 @@
 import { Request, Router } from "express";
 import multer from "multer";
-import { ICreateProductBody, createProduct, editProduct, getProducts } from "src/controllers";
+import {
+  ICreateProductBody,
+  createProduct,
+  deletProduct,
+  editProduct,
+  getProducts,
+} from "src/controllers";
 import { isAuth } from "src/middlewares";
 import validator from "validator";
 
@@ -63,6 +69,8 @@ router.get("/", getProducts);
 router.post("/create", isAuth, upload.single("image"), createProduct);
 
 router.put("/edit/:productId", isAuth, upload.single("image"), editProduct);
+
+router.delete("/delete/:productId", isAuth, deletProduct);
 
 const productRoutes = router;
 export default productRoutes;

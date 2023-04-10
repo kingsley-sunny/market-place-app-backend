@@ -87,3 +87,30 @@ export const editProduct = async (
     next(error);
   }
 };
+
+export const deletProduct = async (
+  req: Request<IEditProductParams, any>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const product: any = await Product.findOne({
+      where: { userId: req.userId, id: req.params.productId },
+      include: "product-image",
+    });
+    if (!product) {
+      const err = createErrorObj("Product not found");
+      err.status = 401;
+      throw err;
+    }
+    const imagePath = product["product-image"].path;
+    const response = await Product.destroy({
+      where: { userId: req.userId, id: req.params.productId },
+    });
+    deleteFile(imagePath);
+    res.json(createSuccessObj({ no: response }));
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
