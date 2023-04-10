@@ -1,6 +1,5 @@
 import { CHAR, INTEGER, ModelDefined, Optional, STRING } from "sequelize";
-import { sequelize } from "../db/db";
-import ProductImage from "./product-image";
+import { sequelize } from "src/db";
 
 export interface ProductAttributes {
   id: string;
@@ -10,12 +9,13 @@ export interface ProductAttributes {
   quantity: number;
   type: "used" | "new";
   description: string;
+  userId: string;
 }
 
-const Product: ModelDefined<
+export const Product: ModelDefined<
   ProductAttributes,
   Optional<ProductAttributes, "location">
-> = sequelize.define("Product", {
+> = sequelize.define("product", {
   id: {
     type: STRING,
     allowNull: false,
@@ -47,8 +47,8 @@ const Product: ModelDefined<
     allowNull: false,
     defaultValue: 1,
   },
+  // userId: {
+  //   type: UUID,
+  //   allowNull: false,
+  // },
 });
-
-Product.hasOne(ProductImage);
-
-export default Product;

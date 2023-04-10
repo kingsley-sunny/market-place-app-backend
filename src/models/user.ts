@@ -1,5 +1,5 @@
 import { BOOLEAN, DataTypes, ModelDefined, Optional, STRING, UUID } from "sequelize";
-import { sequelize } from "../db/db.js";
+import { sequelize } from "src/db";
 
 interface IUserAttributes {
   id: string;
@@ -13,8 +13,8 @@ interface IUserAttributes {
 
 type IUserCreationAttributes = Optional<IUserAttributes, "isVerified" | "type">;
 
-const User: ModelDefined<IUserAttributes, IUserCreationAttributes> = sequelize.define(
-  "User",
+export const User: ModelDefined<IUserAttributes, IUserCreationAttributes> = sequelize.define(
+  "user",
   {
     id: {
       type: UUID,
@@ -61,5 +61,3 @@ const User: ModelDefined<IUserAttributes, IUserCreationAttributes> = sequelize.d
     },
   }
 );
-
-export default User;

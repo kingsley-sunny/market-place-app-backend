@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
-import { createErrorObj } from "../utils/functions.js";
+import { createErrorObj } from "src/utils";
 
 export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   try {

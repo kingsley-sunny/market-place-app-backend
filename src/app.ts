@@ -3,17 +3,18 @@ import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
-import authRoutes from "./apis/auth.js";
-import productRoutes from "./apis/product.js";
-import syncDBRelations from "./db-relations/sync-db-relations.js";
-import { sequelize } from "./db/db.js";
-import { createErrorObj } from "./utils/functions.js";
+import authRoutes from "./apis/auth";
+import productRoutes from "./apis/product";
+import { sequelize } from "./db";
+import { syncDBRelations } from "./db-relations";
+import { createErrorObj } from "./utils";
 
 dotenv.config();
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static("uploads"));
 
 // The authentication route
 app.use("/auth", authRoutes);

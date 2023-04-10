@@ -1,9 +1,8 @@
-import Product from "../models/product";
-import ProductImage from "../models/product-image";
+import { Product, ProductImage, User } from "src/models";
 
-const syncDBRelations = () => {
-  Product.hasOne(ProductImage, { onDelete: "CASCADE", constraints: true });
-  ProductImage.belongsTo(Product);
+export const syncDBRelations = () => {
+  User.hasMany(Product, { onDelete: "CASCADE", foreignKey: "userId" });
+  Product.belongsTo(User, { foreignKey: "userId" });
+  Product.hasOne(ProductImage, { onDelete: "CASCADE", foreignKey: "productId" });
+  ProductImage.belongsTo(Product, { foreignKey: "productId" });
 };
-
-export default syncDBRelations;

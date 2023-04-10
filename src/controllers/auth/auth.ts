@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
+import { User } from "src/models";
+import { createErrorObj, createSuccessObj, deletePropertyFromObject } from "src/utils";
 import { v4 } from "uuid";
-import User from "../../models/user.js";
-import { createErrorObj, createSuccessObj } from "../../utils/functions.js";
-import { IreqSignin, IreqSignup } from "./type.js";
+import { IreqSignin, IreqSignup } from "./type";
 
 dotenv.config();
 
@@ -35,8 +35,8 @@ export const signupUser = async (
     const newUser = User.build({ ...userDetails, id: v4() });
 
     await newUser.save();
-
-    res.status(201).json(createSuccessObj(newUser, "User created SuccessFully", 201));
+    const userWithoutPassword = deletePropertyFromObject(newUser.dataValues, "password");
+    res.status(201).json(createSuccessObj(userWithoutPassword, "User created SuccessFully", 201));
   } catch (error) {
     next(error);
   }
@@ -74,12 +74,12 @@ export const signinUser = async (
       expiresIn: "2d",
       algorithm: "HS256",
     });
-    const response = { email: user.dataValues.email, id: user.dataValues.id, token };
-    // user.
-    res.status(200).json(createSuccessObj(response, "Successfully logged in", 200));
+    const userWithoutPassword = deletePropertyFromObject(user.dataValues, "password");
+    res
+      .status(200)
+      .json(createSuccessObj({ ...userWithoutPassword, token }, "Successfully logged in", 200));
   } catch (error) {
     console.log(error);
-
     next(error);
   }
 };
