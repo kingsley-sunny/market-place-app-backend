@@ -14,11 +14,6 @@ export const getCategories = async (
 ) => {
   try {
     const userId = req.userId;
-    const adminUser = await User.findOne({ where: { id: userId, type: "admin" } });
-    if (!adminUser) {
-      const err = createErrorObj("Unauthorized", 403);
-      throw err;
-    }
     const category = await Category.findAll();
     res.json(createSuccessObj(category));
   } catch (error) {

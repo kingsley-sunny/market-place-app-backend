@@ -3,8 +3,9 @@ import multer from "multer";
 import {
   ICreateProductBody,
   createProduct,
-  deletProduct,
+  deleteProduct,
   editProduct,
+  getProduct,
   getProducts,
 } from "src/controllers";
 import { isAuth } from "src/middlewares";
@@ -66,10 +67,12 @@ const router = Router();
 
 router.get("/", getProducts);
 
+router.get("/:productId", getProduct);
+
 router.post("/create", isAuth, upload.single("image"), createProduct);
 
 router.put("/edit/:productId", isAuth, upload.single("image"), editProduct);
 
-router.delete("/delete/:productId", isAuth, deletProduct);
+router.delete("/delete/:productId", isAuth, deleteProduct);
 
 export const productRoutes = router;

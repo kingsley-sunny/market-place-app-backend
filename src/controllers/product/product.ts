@@ -15,6 +15,25 @@ export const getProducts = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+export const getProduct = async (
+  req: Request<IEditProductParams, any, Omit<ICreateProductBody, "userId">>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const productId = req.params.productId;
+    const products = await Product.findOne({
+      where: { id: productId },
+      include: ["product-image", "category"],
+    });
+
+    res.json(createSuccessObj(products));
+  } catch (error: any) {
+    console.log(error);
+    next(createErrorObj(error.message));
+  }
+};
+
 export const createProduct = async (
   req: Request<any, any, ICreateProductBody>,
   res: Response,
@@ -92,7 +111,7 @@ export const editProduct = async (
   }
 };
 
-export const deletProduct = async (
+export const deleteProduct = async (
   req: Request<IEditProductParams, any>,
   res: Response,
   next: NextFunction
