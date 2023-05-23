@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import { User } from "src/models";
+import { Cart } from "src/models/cart";
 import { createErrorObj, createSuccessObj, deletePropertyFromObject } from "src/utils";
 import { v4 } from "uuid";
 import { IreqSignin, IreqSignup } from "./type";
@@ -35,6 +36,11 @@ export const signupUser = async (
     const newUser = User.build({ ...userDetails, uuid: v4() });
 
     await newUser.save();
+
+    // CREATE THE CART FOR THE USER
+    const cart = Cart.build({ uuid: v4(), userId: newUser.dataValues.id });
+    cart.save();
+
     const userWithoutPassword = deletePropertyFromObject(newUser.dataValues, "password");
     res.status(201).json(createSuccessObj(userWithoutPassword, "User created SuccessFully", 201));
   } catch (error) {

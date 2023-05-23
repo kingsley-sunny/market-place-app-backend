@@ -1,18 +1,19 @@
 import { INTEGER, ModelDefined, Optional, UUID } from "sequelize";
 import { sequelize } from "src/db";
 
-export interface CartAttributes {
+export interface CartItemAttributes {
   id?: number;
   uuid: string;
-  userId?: string;
+  cartId?: string;
+  productId: number;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export const Cart: ModelDefined<
-  CartAttributes,
-  Optional<CartAttributes, "updatedAt">
-> = sequelize.define("cart", {
+export const CartItems: ModelDefined<
+  CartItemAttributes,
+  Optional<CartItemAttributes, "updatedAt">
+> = sequelize.define("cart-items", {
   id: {
     type: INTEGER,
     allowNull: false,
@@ -25,6 +26,14 @@ export const Cart: ModelDefined<
     allowNull: false,
   },
   userId: {
+    type: INTEGER,
+    allowNull: false,
+  },
+  productId: {
+    type: INTEGER,
+    allowNull: false,
+  },
+  cartId: {
     type: INTEGER,
     allowNull: false,
   },
