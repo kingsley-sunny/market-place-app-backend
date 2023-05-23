@@ -34,7 +34,7 @@ export const createCategory = async (
       const err = createErrorObj("Unauthorized", 403);
       throw err;
     }
-    const category = Category.build({ id: v4(), name: req.body.name });
+    const category = Category.build({ uuid: v4(), name: req.body.name });
     await category.save();
     res.status(200).json(createSuccessObj(category));
   } catch (error) {

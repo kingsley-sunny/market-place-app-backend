@@ -32,3 +32,14 @@ export const deleteFile = (filePath: string) => {
     console.log(filePath, " has been deleted");
   });
 };
+
+export const validate = (condition: boolean, msg: string): boolean => {
+  try {
+    if (condition) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    throw Error(msg);
+  }
+};

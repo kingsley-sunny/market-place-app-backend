@@ -1,14 +1,16 @@
-import { CHAR, INTEGER, ModelDefined, Optional, STRING } from "sequelize";
+import { CHAR, INTEGER, ModelDefined, Optional, STRING, UUID } from "sequelize";
 import { sequelize } from "src/db";
 
 export interface ProductAttributes {
-  id: string;
+  id?: string;
+  uuid: string;
   name: string;
   model: string;
   location: string;
   quantity: number;
   type: "used" | "new";
   description: string;
+  price: number;
   userId?: string;
   categoryId?: string;
   createdAt?: string;
@@ -22,10 +24,15 @@ export const Product: ModelDefined<
   "product",
   {
     id: {
-      type: STRING,
+      type: INTEGER,
       allowNull: false,
-      unique: true,
       primaryKey: true,
+      unique: true,
+      autoIncrement: true,
+    },
+    uuid: {
+      type: UUID,
+      allowNull: false,
     },
     name: {
       type: STRING,
@@ -41,6 +48,10 @@ export const Product: ModelDefined<
     },
     description: {
       type: CHAR,
+      allowNull: false,
+    },
+    price: {
+      type: INTEGER,
       allowNull: false,
     },
     location: {

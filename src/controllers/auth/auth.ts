@@ -32,7 +32,7 @@ export const signupUser = async (
     }
     const hashedPassword = await bcrypt.hash(userDetails.password, 12);
     userDetails.password = hashedPassword;
-    const newUser = User.build({ ...userDetails, id: v4() });
+    const newUser = User.build({ ...userDetails, uuid: v4() });
 
     await newUser.save();
     const userWithoutPassword = deletePropertyFromObject(newUser.dataValues, "password");

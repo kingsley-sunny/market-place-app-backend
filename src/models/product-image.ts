@@ -1,21 +1,27 @@
-import { DataTypes, ModelDefined, UUID } from "sequelize";
+import { DataTypes, INTEGER, ModelDefined, UUID } from "sequelize";
 import { sequelize } from "src/db";
 
 export interface ProductImageAttributes {
-  id: string;
+  id?: string;
+  uuid: string;
   name: string;
   path: string;
   url: string;
-  productId: string;
+  productId: number;
 }
 
 export const ProductImage: ModelDefined<ProductImageAttributes, ProductImageAttributes> =
   sequelize.define("product-image", {
     id: {
-      type: UUID,
+      type: INTEGER,
       allowNull: false,
       primaryKey: true,
       unique: true,
+      autoIncrement: true,
+    },
+    uuid: {
+      type: UUID,
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
@@ -29,8 +35,8 @@ export const ProductImage: ModelDefined<ProductImageAttributes, ProductImageAttr
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // productId: {
-    //   type: UUID,
-    //   allowNull: false,
-    // },
+    productId: {
+      type: INTEGER,
+      allowNull: false,
+    },
   });

@@ -54,11 +54,11 @@ export const createProduct = async (
     }
     const product = await user.createProduct({
       ...req.body,
-      id: v4(),
+      uuid: v4(),
       categoryId: req.body.categoryId,
     });
     const image = await ProductImage.create({
-      id: v4(),
+      uuid: v4(),
       name: req.file?.originalname,
       path: req.file?.path,
       url: req.file?.filename,

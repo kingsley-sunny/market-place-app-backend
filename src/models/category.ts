@@ -1,20 +1,26 @@
-import { ModelDefined, STRING, UUID } from "sequelize";
+import { INTEGER, ModelDefined, STRING, UUID } from "sequelize";
 import { sequelize } from "src/db";
 
-interface Icategory {
+interface ICategory {
   name: string;
   createdAt?: string;
   updatedAt?: string;
-  id: string;
+  id?: string;
+  uuid: string;
 }
 
-export const Category: ModelDefined<Icategory, Icategory> = sequelize.define(
+export const Category: ModelDefined<ICategory, ICategory> = sequelize.define(
   "category",
   {
     id: {
-      type: UUID,
+      type: INTEGER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
+    },
+    uuid: {
+      type: UUID,
+      allowNull: false,
     },
     name: {
       type: STRING,

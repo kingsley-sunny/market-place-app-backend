@@ -1,8 +1,9 @@
-import { BOOLEAN, DataTypes, ModelDefined, Optional, STRING, UUID } from "sequelize";
+import { BOOLEAN, DataTypes, INTEGER, ModelDefined, Optional, STRING, UUID } from "sequelize";
 import { sequelize } from "src/db";
 
 interface IUserAttributes {
-  id: string;
+  id?: string;
+  uuid: string;
   firstname: string;
   lastname: string;
   email: string;
@@ -17,10 +18,15 @@ export const User: ModelDefined<IUserAttributes, IUserCreationAttributes> = sequ
   "user",
   {
     id: {
+      type: INTEGER,
+      unique: true,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    uuid: {
       type: UUID,
       allowNull: false,
-      unique: true,
-      primaryKey: true,
     },
     firstname: {
       type: DataTypes.STRING,

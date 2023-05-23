@@ -9,21 +9,53 @@ import {
   getProducts,
 } from "src/controllers";
 import { isAuth } from "src/middlewares";
+import { validate } from "src/utils";
 import validator from "validator";
 
 const MAX_IMAGE_SIZE = 2_000_000_000;
 
-const validateProductReqBody = (req: Request<any, any, ICreateProductBody>): boolean => {
+const validateProductReqBody = (
+  req: Request<any, any, ICreateProductBody>
+): { success: boolean; msg: string } => {
+  const { description, location, model, name, type, price } = req.body;
   try {
-    const { description, location, model, name, type } = req.body;
-    const isDescriptionValid = validator.isLength(description, { min: 5 });
-    const isLocationValid = validator.isLength(location, { min: 2 });
-    const isModelValid = validator.isLength(model, { min: 1 });
-    const isNameValid = validator.isLength(name, { min: 1 });
-    const isTypeValid = validator.equals(type, "new") || validator.equals(type, "used");
-    return isDescriptionValid && isLocationValid && isModelValid && isNameValid && isTypeValid;
-  } catch (error) {
-    return false;
+    const isDescriptionValid = validate(
+      validator.isLength(description, { min: 5 }),
+      "Description Must be Greater 5 characters"
+    );
+    const isLocationValid = validate(
+      validator.isLength(location, { min: 1 }),
+      "Please Fill in your location"
+    );
+    const isModelValid = validate(
+      validator.isLength(model, { min: 1 }),
+      "Product Model is required"
+    );
+    const isNameValid = validate(validator.isLength(name, { min: 1 }), "Product Name is required");
+    const isPriceValid = validate(price >= 0, "Product price cannot be zero");
+    const isTypeValid = validate(
+      validator.equals(type, "new") || validator.equals(type, "used"),
+      "Product Type should be used or new"
+    );
+
+    const isAllFieldsValid =
+      isDescriptionValid &&
+      isLocationValid &&
+      isModelValid &&
+      isNameValid &&
+      isTypeValid &&
+      isPriceValid;
+
+    if (isAllFieldsValid) {
+      return {
+        success: true,
+        msg: "success",
+      };
+    }
+
+    return { success: false, msg: "NO valid credentials" };
+  } catch (error: any) {
+    return { success: false, msg: error.message };
   }
 };
 
@@ -31,8 +63,8 @@ const storage = multer.diskStorage({
   destination: "uploads",
   filename(req: Request<{ productId?: string }, any, ICreateProductBody>, file, callback) {
     const validCredentials = validateProductReqBody(req);
-    if (!validCredentials) {
-      callback(Error("No valid credentials"), "");
+    if (!validCredentials.success) {
+      callback(Error(validCredentials.msg), "");
       return;
     }
 
