@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
 import { adminRoutes, authRoutes, productRoutes } from "./apis";
+import { cartRoutes } from "./apis/cart";
 import { sequelize } from "./db";
 import { syncDBRelations } from "./db-relations";
 import { isAuth } from "./middlewares";
@@ -19,6 +20,7 @@ app.use(express.static("uploads"));
 // The  routes
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
+app.use("/cart", isAuth, cartRoutes);
 app.use("/admin", isAuth, adminRoutes);
 
 // if the app has an error

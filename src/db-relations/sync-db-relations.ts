@@ -10,7 +10,7 @@ export const syncDBRelations = () => {
   Category.hasMany(Product, { onDelete: "SET NULL", foreignKey: "categoryId" });
   Product.belongsTo(Category, { foreignKey: "categoryId" });
   User.hasOne(Cart, { onDelete: "CASCADE", foreignKey: "userId" });
-  Cart.belongsTo(User, { onDelete: "SET NULL", foreignKey: "cartId" });
+  Cart.belongsTo(User, { onDelete: "SET NULL", foreignKey: "userId" });
 
   CartItems.hasMany(Product, { foreignKey: "productId" });
   // Product.belongsToMany(CartItems, { through: "cart-items" });

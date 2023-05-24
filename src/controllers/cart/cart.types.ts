@@ -1,0 +1,3 @@
+interface CartBody {
+  productId: number;
+}

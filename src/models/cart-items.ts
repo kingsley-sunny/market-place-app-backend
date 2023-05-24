@@ -4,7 +4,8 @@ import { sequelize } from "src/db";
 export interface CartItemAttributes {
   id?: number;
   uuid: string;
-  cartId?: string;
+  quantity: number;
+  cartId?: number;
   productId: number;
   createdAt?: string;
   updatedAt?: string;
@@ -25,7 +26,7 @@ export const CartItems: ModelDefined<
     type: UUID,
     allowNull: false,
   },
-  userId: {
+  quantity: {
     type: INTEGER,
     allowNull: false,
   },
