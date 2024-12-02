@@ -6,8 +6,9 @@ import jwt from "jsonwebtoken";
 import { User } from "src/models";
 import { Cart } from "src/models/cart";
 import { createErrorObj, createSuccessObj, deletePropertyFromObject } from "src/utils";
-import { v4 } from "uuid";
+import { v4 as uuid } from "uuid";
 import { IreqSignin, IreqSignup } from "./type";
+import { Model } from "sequelize";
 
 dotenv.config();
 
@@ -16,34 +17,37 @@ export const signupUser = async (
   res: Response<{}>,
   next: NextFunction
 ) => {
+  let user: Model<any, any>;
   try {
     let validationErrors: any[] = validationResult(req).array();
+
     if (validationErrors.length > 0) {
       const err = createErrorObj(validationErrors[0].msg);
       err.status = 401;
       throw err;
     }
 
-    const userDetails = { ...req.body };
-    const user = await User.findOne({ where: { email: userDetails.email } });
-    if (user) {
-      const err = createErrorObj("user is already present");
-      err.status = 401;
-      throw err;
-    }
+    const userDetails = req.body;
+
+    await throwIfUserAlreadyExists(userDetails);
+
     const hashedPassword = await bcrypt.hash(userDetails.password, 12);
     userDetails.password = hashedPassword;
-    const newUser = User.build({ ...userDetails, uuid: v4() });
-
-    await newUser.save();
+    user = await User.build({ ...userDetails, uuid: uuid() }).save();
 
     // CREATE THE CART FOR THE USER
-    const cart = Cart.build({ uuid: v4(), userId: newUser.dataValues.id });
+    const cart = Cart.build({
+      uuid: uuid(),
+      userId: user.dataValues.id,
+      totalAmount: 0,
+      totalQuantity: 0,
+    });
     cart.save();
 
-    const userWithoutPassword = deletePropertyFromObject(newUser.dataValues, "password");
+    const userWithoutPassword = deletePropertyFromObject(user.dataValues, "password");
     res.status(201).json(createSuccessObj(userWithoutPassword, "User created SuccessFully", 201));
   } catch (error) {
+    // check if user has aalreaddy been creeeated
     next(error);
   }
 };
@@ -89,3 +93,13 @@ export const signinUser = async (
     next(error);
   }
 };
+
+async function throwIfUserAlreadyExists(userDetails: IreqSignup) {
+  const user = await User.findOne({ where: { email: userDetails.email } });
+
+  if (user) {
+    const err = createErrorObj("user is already present");
+    err.status = 401;
+    throw err;
+  }
+}

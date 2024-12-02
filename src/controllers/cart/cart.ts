@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { Product } from "src/models";
 import { Cart } from "src/models/cart";
 import { CartItems } from "src/models/cart-items";
 import { createErrorObj, createSuccessObj } from "src/utils";
@@ -20,6 +21,14 @@ export const addToCart = async (
       throw err;
     }
 
+    // we check if the product id is a correct one
+    const product = await Product.findOne({ where: { id: productId } });
+    if (!product) {
+      const err = createErrorObj("This Product is Not found");
+      err.status = 401;
+      throw err;
+    }
+
     // we check if the productId is already in the cart.
     const cartItem = await CartItems.findOne({
       where: { productId: productId, cartId: cart.dataValues.id },
@@ -30,6 +39,7 @@ export const addToCart = async (
       const newCartItem = CartItems.build({
         productId,
         quantity: 1,
+        amount: product.dataValues.price,
         uuid: v4(),
         cartId: cart.dataValues.id,
       });
@@ -104,7 +114,18 @@ export const getCartItems = async (
   next: NextFunction
 ): Promise<any> => {
   const userId = req.userId;
-  const cartItems = await CartItems.findAll({ where: { cartId: userId } });
+  const cartItems = await Cart.findAll({ where: { id: userId }, include: [Product] });
 
+  res.status(200).json(createSuccessObj(cartItems));
+};
+
+export const clearAllCart = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any> => {
+  const userId = req.userId;
+
+  const cartItems = await CartItems.destroy({ where: { cartId: userId } });
   res.status(200).json(createSuccessObj(cartItems));
 };

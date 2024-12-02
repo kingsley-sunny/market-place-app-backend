@@ -14,6 +14,9 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
       algorithms: ["HS256"],
     }) as any;
 
+    if (userDetails?.id) {
+      throw new Error("Error validating user");
+    }
     req.userId = userDetails.id;
     console.log(req.userId, userDetails);
 

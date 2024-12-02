@@ -1,4 +1,4 @@
-import { CHAR, INTEGER, ModelDefined, Optional, STRING, UUID } from "sequelize";
+import { CHAR, ENUM, INTEGER, ModelDefined, Optional, STRING, UUID } from "sequelize";
 import { sequelize } from "src/db";
 
 export interface ProductAttributes {
@@ -8,7 +8,7 @@ export interface ProductAttributes {
   model: string;
   location: string;
   quantity: number;
-  type: "used" | "new";
+  type: "USED" | "NEW";
   description: string;
   price: number;
   userId?: string;
@@ -43,7 +43,7 @@ export const Product: ModelDefined<
       allowNull: false,
     },
     type: {
-      type: STRING,
+      type: ENUM("USED", "NEW"),
       allowNull: false,
     },
     description: {

@@ -23,7 +23,7 @@ app.use("/products", productRoutes);
 app.use("/cart", isAuth, cartRoutes);
 app.use("/admin", isAuth, adminRoutes);
 
-// if the app has an error
+// if the app has an error > exception filter
 app.use(
   (error: ReturnType<typeof createErrorObj>, req: Request, res: Response, next: NextFunction) => {
     if (!error.status) {

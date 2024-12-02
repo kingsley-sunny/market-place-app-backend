@@ -5,6 +5,8 @@ export interface CartAttributes {
   id?: number;
   uuid: string;
   userId?: string;
+  totalQuantity: number;
+  totalAmount: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -25,6 +27,14 @@ export const Cart: ModelDefined<
     allowNull: false,
   },
   userId: {
+    type: INTEGER,
+    allowNull: false,
+  },
+  totalAmount: {
+    type: INTEGER,
+    allowNull: false,
+  },
+  totalQuantity: {
     type: INTEGER,
     allowNull: false,
   },
